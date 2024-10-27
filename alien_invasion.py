@@ -13,7 +13,7 @@ class Alien_Invasion:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien_Invasion")
         #Make sure to change the diretory to the correct path
-        self.bg_colour = (27, 40, 45)
+        self.bg_colour = (25, 20, 30)
         self.clock = pygame.time.Clock()
         self.ship = Ship(self)
 
