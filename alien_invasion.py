@@ -11,7 +11,8 @@ class Alien_Invasion:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien_Invasion")
-        self.bg_img = pygame.image.load("images/bgimg.jpg")
+        #Make sure to change the diretory to the correct path
+        self.bg_img = pygame.image.load('D:/Latheesh/Projects/py_projects/alien_invasion/images/bgimg.jpg')
         self.clock = pygame.time.Clock()
 
     def run_game(self):
