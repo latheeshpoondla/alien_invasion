@@ -1,6 +1,7 @@
 import pygame
 import sys
 from settings import Settings
+from ship import Ship
 
 
 class Alien_Invasion:
@@ -12,8 +13,9 @@ class Alien_Invasion:
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien_Invasion")
         #Make sure to change the diretory to the correct path
-        self.bg_img = pygame.image.load('D:/Latheesh/Projects/py_projects/alien_invasion/images/bgimg.jpg')
+        self.bg_colour = (27, 40, 45)
         self.clock = pygame.time.Clock()
+        self.ship = Ship(self)
 
     def run_game(self):
         """Main Loop - display loop"""
@@ -22,7 +24,9 @@ class Alien_Invasion:
                 """Event loop"""
                 if event.type == pygame.QUIT:
                     sys.exit()
-            self.screen.blit(self.bg_img, (0, 0))
+                    
+            self.ship.blitship()
+            self.screen.fill(self.bg_colour)
             pygame.display.flip()
             self.clock.tick(60)
 
