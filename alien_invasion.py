@@ -12,7 +12,6 @@ class Alien_Invasion:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien_Invasion")
-        #Make sure to change the diretory to the correct path
         self.bg_colour = (25, 20, 30)
         self.clock = pygame.time.Clock()
         self.ship = Ship(self)
@@ -25,8 +24,8 @@ class Alien_Invasion:
                 if event.type == pygame.QUIT:
                     sys.exit()
                     
-            self.ship.blitship()
             self.screen.fill(self.bg_colour)
+            self.ship.blitship()#make sure that these are in correct order
             pygame.display.flip()
             self.clock.tick(60)
 
