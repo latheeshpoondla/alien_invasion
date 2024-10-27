@@ -11,7 +11,7 @@ class Alien_Invasion:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien_Invasion")
-        self.bg_color = self.settings.bg_color
+        self.bg_img = pygame.image.load("images/bgimg.jpg")
         self.clock = pygame.time.Clock()
 
     def run_game(self):
@@ -21,7 +21,7 @@ class Alien_Invasion:
                 """Event loop"""
                 if event.type == pygame.QUIT:
                     sys.exit()
-            self.screen.fill(self.bg_color)
+            self.screen.blit(self.bg_img, (0, 0))
             pygame.display.flip()
             self.clock.tick(60)
 
