@@ -6,6 +6,7 @@ class Alien_Invasion:
         pygame.init()
         self.screen = pygame.display.set_mode((1200,800))
         pygame.display.set_caption("Alien Invasion")
+        self.clock = pygame.time.Clock()
     def run_game(self):
         '''Main loop - display loop'''
         while True:
@@ -14,6 +15,7 @@ class Alien_Invasion:
                 if event.type == pygame.QUIT:
                     sys.exit()
             pygame.display.flip()
+            self.clock.tick(60)
 if __name__ == '__main__':
     ai = Alien_Invasion()
     ai.run_game()
