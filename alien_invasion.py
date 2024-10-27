@@ -1,5 +1,6 @@
 import pygame
 import sys
+from settings import Settings
 
 
 class Alien_Invasion:
@@ -7,9 +8,10 @@ class Alien_Invasion:
 
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((1200, 800))
+        self.settings = Settings()
+        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien_Invasion")
-        self.bg_color = (180, 255, 190)
+        self.bg_color = self.settings.bg_color
         self.clock = pygame.time.Clock()
 
     def run_game(self):
