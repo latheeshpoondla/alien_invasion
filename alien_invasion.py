@@ -2,6 +2,7 @@ import pygame
 import sys
 from settings import Settings
 from ship import Ship
+from bullet import Bullet
 
 
 class Alien_Invasion:
@@ -17,6 +18,7 @@ class Alien_Invasion:
         self.bg_colour = self.settings.bgcolor
         self.clock = pygame.time.Clock()
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
         self.fullscreen = 0
 
     def run_game(self):
@@ -24,6 +26,8 @@ class Alien_Invasion:
         while True:
             self._event_checker()
             self.ship._update_ship()
+            self.bullets.update()
+            self._delete_bullet()
             self._update_screen()
 
             self.clock.tick(300)
@@ -34,11 +38,11 @@ class Alien_Invasion:
             if event.type == pygame.QUIT:
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                self.check_event_keydown(event)
+                self._check_event_keydown(event)
             elif event.type == pygame.KEYUP:
-                self.check_event_keyup(event)
+                self._check_event_keyup(event)
 
-    def check_event_keydown(self, event):
+    def _check_event_keydown(self, event):
         if event.key == pygame.K_q:
             sys.exit()
         if event.key == pygame.K_RIGHT:
@@ -55,17 +59,27 @@ class Alien_Invasion:
             self.settings.screen_height = self.screen.get_height()
             self.settings.screen_width = self.screen.get_width()
             self.ship.resize_screen()
+        if event.key == pygame.K_SPACE:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
     
-    def check_event_keyup(self, event):
+    def _check_event_keyup(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.move_right = False
         if event.key == pygame.K_LEFT:
             self.ship.move_left = False
     
+    def _delete_bullet(self):
+        for bullet in self.bullets.sprites():
+            if bullet.y <= 0:
+                bullet.kill()
+            
     def _update_screen(self):
         """manages changes on screen"""
         self.screen.fill(self.bg_colour)
         self.ship.blitship()  # make sure that these are in correct order
+        for bullet in self.bullets.sprites():
+            bullet.draw_bullet()
         pygame.display.flip()
 
 
