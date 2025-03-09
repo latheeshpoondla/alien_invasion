@@ -7,12 +7,12 @@ class Ship:
     def __init__(self, ai_game):
         self.ai_game = ai_game
         self.screen = ai_game.screen
-        self.screen_rect = ai_game.screen.get_rect()
+        self.screen_rect = self.screen.get_rect()
         # Make sure to give the correct path to the image
-        img = pygame.image.load(
+        self.img = pygame.image.load(
             "D:/Latheesh/Projects/py_projects/alien_invasion/images/ship.bmp"
         )
-        self.image = pygame.transform.scale(img, (100, 120))
+        self.image = pygame.transform.scale(self.img, (self.ai_game.settings.screen_width//12, self.ai_game.settings.screen_height*3//20))
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom
         self.move_right = False
@@ -26,3 +26,11 @@ class Ship:
             self.rect.x += self.ai_game.settings.ship_speed
         if self.move_left and self.rect.centerx >= 0:
             self.rect.x -= self.ai_game.settings.ship_speed
+            
+    def resize_screen(self, x):
+        self.screen = self.ai_game.screen
+        self.screen_rect = self.screen.get_rect()
+        self.image = pygame.transform.scale(self.img, (self.ai_game.settings.screen_width//12, self.ai_game.settings.screen_height*3//20))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x*self.screen_rect.width
+        self.rect.bottom = self.screen_rect.bottom

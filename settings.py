@@ -2,6 +2,8 @@ class Settings:
     """settings for Alien Invasion"""
 
     def __init__(self):
+        self.win_screen_width = 1200
+        self.win_screen_height = 800
         self.screen_width = 1200
         self.screen_height = 800
         self.bgcolor = (25, 20, 30)
