@@ -46,7 +46,6 @@ class Alien_Invasion:
         if event.key == pygame.K_LEFT:
             self.ship.move_left = True
         if event.key == pygame.K_f:
-            x = self.ship.rect.centerx/self.settings.screen_width
             if self.fullscreen == 0:
                 self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
                 self.fullscreen = 1
@@ -55,7 +54,7 @@ class Alien_Invasion:
                 self.fullscreen = 0
             self.settings.screen_height = self.screen.get_height()
             self.settings.screen_width = self.screen.get_width()
-            self.ship.resize_screen(x)
+            self.ship.resize_screen()
     
     def check_event_keyup(self, event):
         if event.key == pygame.K_RIGHT:
