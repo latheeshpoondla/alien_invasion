@@ -3,6 +3,7 @@ import sys
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 
 class Alien_Invasion:
@@ -18,6 +19,9 @@ class Alien_Invasion:
         self.bg_colour = self.settings.bgcolor
         self.clock = pygame.time.Clock()
         self.ship = Ship(self)
+        self.aliens = pygame.sprite.Group()
+        new_alien = Alien(self)
+        self.aliens.add(new_alien)
         self.bullets = pygame.sprite.Group()
         self.fullscreen = 0
 
@@ -77,9 +81,11 @@ class Alien_Invasion:
     def _update_screen(self):
         """manages changes on screen"""
         self.screen.fill(self.bg_colour)
-        self.ship.blitship()  # make sure that these are in correct order
+        self.ship.blitship() # make sure that these are in correct order
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        for alien in self.aliens.sprites():
+            alien.blit()
         pygame.display.flip()
 
 
