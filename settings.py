@@ -10,5 +10,5 @@ class Settings:
         self.ship_speed = 1
         self.bullet_speed = 2
         self.bullet_color = (255, 255, 255)
-        self.bullet_width = 2
-        self.bullet_height = 5
+        self.alien_width = self.screen_width//24
+        self.alien_height = self.screen_width//24

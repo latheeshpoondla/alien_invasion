@@ -20,16 +20,21 @@ class Alien_Invasion:
         self.clock = pygame.time.Clock()
         self.ship = Ship(self)
         self.aliens = pygame.sprite.Group()
-        new_alien = Alien(self)
-        self.aliens.add(new_alien)
         self.bullets = pygame.sprite.Group()
         self.fullscreen = 0
+        self.aliens_no = 0
+        self.alien_speed = 0
+        
 
     def run_game(self):
         """Main Loop - display loop"""
         while True:
+            if self.aliens_no == 0:
+                self.alien_speed += 0.05
+                self._set_fleet()
             self._event_checker()
             self.ship._update_ship()
+            self.aliens.update()
             self.bullets.update()
             self._delete_bullet()
             self._update_screen()
@@ -77,6 +82,20 @@ class Alien_Invasion:
         for bullet in self.bullets.sprites():
             if bullet.y <= 0:
                 bullet.kill()
+    
+    def _set_fleet(self):
+        self.aliens_no = self.settings.screen_width//self.settings.alien_width - 5
+        inc = (self.settings.screen_width-self.aliens_no*self.settings.alien_width)/(self.aliens_no + 1) + self.settings.alien_width
+        y = self.settings.alien_height/2
+        for _ in range(3):
+            x = inc-self.settings.alien_width/2
+            for _ in range(self.aliens_no):
+                new_alien = Alien(self)
+                new_alien.alien_speed = self.alien_speed
+                new_alien._set_position(x, y)
+                self.aliens.add(new_alien)
+                x += inc
+            y += self.settings.alien_height
             
     def _update_screen(self):
         """manages changes on screen"""
