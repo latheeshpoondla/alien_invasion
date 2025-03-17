@@ -16,6 +16,7 @@ class Ship:
         self.move_right = False
         self.move_left = False
         self.x = float(self.rect.centerx)
+        self.y = float(self.rect.centery)
 
     def blitship(self):
         self.screen.blit(self.image, self.rect)

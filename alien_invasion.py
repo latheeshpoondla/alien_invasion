@@ -4,6 +4,7 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+import os
 
 
 class Alien_Invasion:
@@ -30,16 +31,18 @@ class Alien_Invasion:
         """Main Loop - display loop"""
         while True:
             if self.aliens_no == 0:
-                self.alien_speed += 0.05
+                self.alien_speed += 0.02
                 self._set_fleet()
             self._event_checker()
             self.ship._update_ship()
             self.aliens.update()
             self.bullets.update()
+            self._delete_alien()
             self._delete_bullet()
             self._update_screen()
-
-            self.clock.tick(300)
+            if self._check_game_over():
+                self._end_game()
+            self.clock.tick(500)
 
     def _event_checker(self):
         """Checks for events (user input)"""
@@ -82,7 +85,20 @@ class Alien_Invasion:
         for bullet in self.bullets.sprites():
             if bullet.y <= 0:
                 bullet.kill()
-    
+
+    def _delete_alien(self):
+        for bullet in self.bullets.sprites():
+            for alien in self.aliens.sprites():
+                w = self.settings.alien_width/2
+                c1 = bullet.y <= alien.y+w
+                c2 = alien.x-w < bullet.x
+                c3 = bullet.x < alien.x+w
+                if c1  and c2 and c3:
+                    bullet.kill()
+                    alien.kill()
+                    self.aliens_no -= 1
+                    break
+
     def _set_fleet(self):
         self.aliens_no = self.settings.screen_width//self.settings.alien_width - 5
         inc = (self.settings.screen_width-self.aliens_no*self.settings.alien_width)/(self.aliens_no + 1) + self.settings.alien_width
@@ -96,7 +112,15 @@ class Alien_Invasion:
                 self.aliens.add(new_alien)
                 x += inc
             y += self.settings.alien_height
-            
+        self.aliens_no *= 3
+        
+    def _check_game_over(self):
+        wa = self.settings.alien_width/2
+        ws = self.ship.rect.width/2
+        for alien in self.aliens.sprites():
+            if alien.y+wa >  self.ship.y-ws:
+                return True
+    
     def _update_screen(self):
         """manages changes on screen"""
         self.screen.fill(self.bg_colour)
@@ -106,7 +130,15 @@ class Alien_Invasion:
         for alien in self.aliens.sprites():
             alien.blit()
         pygame.display.flip()
-
+        
+    def _end_game(self):
+        go_img = pygame.image.load(os.path.join("images", "game_over.bmp"))
+        go_img = pygame.transform.scale(go_img, (self.settings.screen_width, self.settings.screen_height))
+        go_rect = go_img.get_rect()
+        for _ in range(700):
+            self.screen.blit(go_img, go_rect)
+            pygame.display.flip()
+        sys.exit()
 
 if __name__ == "__main__":
     ai = Alien_Invasion()
