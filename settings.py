@@ -12,3 +12,4 @@ class Settings:
         self.bullet_color = (255, 255, 255)
         self.alien_width = self.screen_width//24
         self.alien_height = self.screen_width//24
+        self.ship_limit = 3
