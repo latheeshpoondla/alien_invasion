@@ -22,7 +22,6 @@ class Alien_Invasion:
         self.ship = Ship(self)
         self.aliens = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
-        self.fullscreen = 0
         self.aliens_no = 0
         self.alien_speed = 0
         
@@ -36,9 +35,7 @@ class Alien_Invasion:
             self._event_checker()
             self.ship._update_ship()
             self.aliens.update()
-            self.bullets.update()
-            self._delete_alien()
-            self._delete_bullet()
+            self._update_bullet()
             self._update_screen()
             if self._check_game_over():
                 self._end_game()
@@ -61,16 +58,6 @@ class Alien_Invasion:
             self.ship.move_right = True
         if event.key == pygame.K_LEFT:
             self.ship.move_left = True
-        if event.key == pygame.K_f:
-            if self.fullscreen == 0:
-                self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-                self.fullscreen = 1
-            elif self.fullscreen == 1:
-                self.screen = pygame.display.set_mode((self.settings.win_screen_width, self.settings.win_screen_height))
-                self.fullscreen = 0
-            self.settings.screen_height = self.screen.get_height()
-            self.settings.screen_width = self.screen.get_width()
-            self.ship.resize_screen()
         if event.key == pygame.K_SPACE:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
@@ -81,23 +68,15 @@ class Alien_Invasion:
         if event.key == pygame.K_LEFT:
             self.ship.move_left = False
     
-    def _delete_bullet(self):
+    def _update_bullet(self):
+        self.bullets.update()
         for bullet in self.bullets.sprites():
             if bullet.y <= 0:
                 bullet.kill()
-
-    def _delete_alien(self):
-        for bullet in self.bullets.sprites():
-            for alien in self.aliens.sprites():
-                w = self.settings.alien_width/2
-                c1 = bullet.y <= alien.y+w
-                c2 = alien.x-w < bullet.x
-                c3 = bullet.x < alien.x+w
-                if c1  and c2 and c3:
-                    bullet.kill()
-                    alien.kill()
-                    self.aliens_no -= 1
-                    break
+        self._strike_alien()
+    
+    def _strike_alien(self):
+        pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
     def _set_fleet(self):
         self.aliens_no = self.settings.screen_width//self.settings.alien_width - 5
