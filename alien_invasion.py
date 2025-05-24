@@ -8,6 +8,7 @@ from time import sleep
 from ai_stats import Stats
 from life import Life
 from button import Button
+from score import Score
 import os
 
 
@@ -30,10 +31,12 @@ class Alien_Invasion:
         self.aliens_no = 0
         self.alien_speed = 0
         self.life_list = []
+        self.fleet_no = 0
         self.play_button = Button(self, "Play")
         self.lives = pygame.sprite.Group()
         self.game_status = False
         self._create_lives()
+        self.sb = Score(self)
         
 
     def run_game(self):
@@ -42,7 +45,7 @@ class Alien_Invasion:
             self._event_checker()
             if self.game_status:
                 if self.aliens_no == 0:
-                    self.alien_speed += 0.1
+                    self.alien_speed += 0.02
                     self._set_fleet()
                 self.ship._update_ship()
                 self._update_alien()
@@ -88,6 +91,8 @@ class Alien_Invasion:
         self.aliens_no = 0
         self.life_list.clear()
         self.lives.empty()
+        self.fleet_no = 0
+        self.sb.prep_level(self.fleet_no)
     
     def _check_event_keyup(self, event):
         if event.key == pygame.K_RIGHT:
@@ -99,6 +104,7 @@ class Alien_Invasion:
         """Start the game when the player clicks Play"""
         if self.play_button.rect.collidepoint(mouse_pos) and not self.game_status:
             self.game_status = True
+            self.sb.prep_score()
             self._create_lives()
             pygame.mouse.set_visible(False)
     
@@ -118,8 +124,12 @@ class Alien_Invasion:
                 self.life_list.append(new_life)
                 
     def _strike_alien(self):
-        pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         self.aliens_no = len(self.aliens)
+        if collisions:
+            self.stats.score += self.fleet_no*len(collisions)
+            self.sb.prep_score()
+            self.sb.check_high_score()
 
     def _set_fleet(self):
         self.aliens_no = self.settings.screen_width//self.settings.alien_width - 5
@@ -135,6 +145,8 @@ class Alien_Invasion:
                 x += inc
             y += self.settings.alien_height
         self.aliens_no *= 3
+        self.fleet_no += 1
+        self.sb.prep_level(self.fleet_no)
         
     def _update_alien(self):
         self.aliens.update()
@@ -165,6 +177,7 @@ class Alien_Invasion:
     def _update_screen(self):
         """manages changes on screen"""
         self.screen.fill(self.bg_colour)
+        self.sb.show_score()
         self.ship.blitship() # make sure that these are in correct order
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
