@@ -7,6 +7,7 @@ from alien import Alien
 from time import sleep
 from ai_stats import Stats
 from life import Life
+from button import Button
 import os
 
 
@@ -29,20 +30,23 @@ class Alien_Invasion:
         self.aliens_no = 0
         self.alien_speed = 0
         self.life_list = []
+        self.play_button = Button(self, "Play")
         self.lives = pygame.sprite.Group()
+        self.game_status = False
         self._create_lives()
         
 
     def run_game(self):
         """Main Loop - display loop"""
         while True:
-            if self.aliens_no == 0:
-                self.alien_speed += 0.05
-                self._set_fleet()
             self._event_checker()
-            self.ship._update_ship()
-            self._update_alien()
-            self._update_bullet()
+            if self.game_status:
+                if self.aliens_no == 0:
+                    self.alien_speed += 0.1
+                    self._set_fleet()
+                self.ship._update_ship()
+                self._update_alien()
+                self._update_bullet()
             self._update_screen()
             self.clock.tick(500)
 
@@ -55,6 +59,9 @@ class Alien_Invasion:
                 self._check_event_keydown(event)
             elif event.type == pygame.KEYUP:
                 self._check_event_keyup(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self.check_play_button(mouse_pos)
 
     def _check_event_keydown(self, event):
         if event.key == pygame.K_q:
@@ -66,12 +73,34 @@ class Alien_Invasion:
         if event.key == pygame.K_SPACE:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+        if event.key == pygame.K_ESCAPE:
+            self.reset_game()
+    
+    def reset_game(self):
+        """Reset the game to initial state"""
+        self.stats.reset_stats()
+        self.aliens.empty()
+        self.bullets.empty()
+        self.ship.center_ship()
+        self.alien_speed = 0
+        self.game_status = False
+        pygame.mouse.set_visible(True)
+        self.aliens_no = 0
+        self.life_list.clear()
+        self.lives.empty()
     
     def _check_event_keyup(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.move_right = False
         if event.key == pygame.K_LEFT:
             self.ship.move_left = False
+    
+    def check_play_button(self, mouse_pos):
+        """Start the game when the player clicks Play"""
+        if self.play_button.rect.collidepoint(mouse_pos) and not self.game_status:
+            self.game_status = True
+            self._create_lives()
+            pygame.mouse.set_visible(False)
     
     def _update_bullet(self):
         self.bullets.update()
@@ -81,12 +110,13 @@ class Alien_Invasion:
         self._strike_alien()
     
     def _create_lives(self):
-        for i in range(self.stats.ships_left):
-            new_life = Life(self)
-            new_life.rect.centerx -= (i*40)
-            self.lives.add(new_life)
-            self.life_list.append(new_life)
-            
+        if self.game_status:
+            for i in range(self.stats.ships_left):
+                new_life = Life(self)
+                new_life.rect.centerx -= (i*40)
+                self.lives.add(new_life)
+                self.life_list.append(new_life)
+                
     def _strike_alien(self):
         pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         self.aliens_no = len(self.aliens)
@@ -142,6 +172,8 @@ class Alien_Invasion:
             alien.blit()
         for life in self.lives.sprites():
             life.blit()
+        if not self.game_status:
+            self.play_button.draw_button()
         pygame.display.flip()
         
     def _end_game(self):
@@ -151,7 +183,7 @@ class Alien_Invasion:
         for _ in range(700):
             self.screen.blit(go_img, go_rect)
             pygame.display.flip()
-        sys.exit()
+        self.reset_game()
 
 if __name__ == "__main__":
     ai = Alien_Invasion()
