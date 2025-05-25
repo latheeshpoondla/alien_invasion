@@ -169,6 +169,7 @@ class Alien_Invasion:
             self.aliens.empty()
             self.bullets.empty()
             self.alien_speed = 0
+            self.fleet_no = 0
             self.ship.center_ship()
             sleep(0.5)
         else:
