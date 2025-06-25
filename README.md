@@ -85,13 +85,6 @@ Special thanks to Eric Matthes for the exceptional guidance and foundational cod
 
 ---
 
-## 📸 Screenshots & Demo
-
-> 📷 _Add gameplay screenshots here_  
-> 🎥 _Optional: Embed or link to a short demo video_
-
----
-
 ## 🔗 Try It Out
 
 Clone the repository and run the game locally:
