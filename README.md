@@ -75,16 +75,6 @@ Special thanks to Eric Matthes for the exceptional guidance and foundational cod
 
 ---
 
-## 🧠 Lessons Learned
-
-- Implementing clean, modular OOP architecture for games
-- Working with sprite-based animation and collision detection
-- Designing user-friendly UI with Pygame
-- Managing state transitions (menu, active game, game over)
-- Optimizing frame rate and performance
-
----
-
 ## 🔗 Try It Out
 
 Clone the repository and run the game locally:
