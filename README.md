@@ -80,8 +80,8 @@ Special thanks to Eric Matthes for the exceptional guidance and foundational cod
 Clone the repository and run the game locally:
 
 ```bash
-git clone https://github.com/your-username/alien-invasion
-cd alien-invasion
+git clone https://github.com/latheeshpoondla/alien_invasion
+cd alien_invasion
 python alien_invasion.py
 ```
 
