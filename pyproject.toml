@@ -1,0 +1,18 @@
+[project]
+name = "alien-invasion"
+version = "0.1.0"
+description = "A shooting game based on Eric Mattes Python Crash Course Book"
+authors = [
+    {name = "Latheesh Poondla",email = "latheeshpoondla1@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pygame (>=2.6.1,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
